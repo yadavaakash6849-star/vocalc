@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131b">
+  <meta name="description" content="A modern scientific calculator with natural voice commands.">
+  <title>Vocalc — Voice Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Vocalc home">
+        <span class="brand-mark">v<span>.</span></span>
+        <span class="brand-name">vocalc<span> / voice calculator</span></span>
+      </a>
+      <div class="top-actions">
+        <span class="status-label"><span class="status-dot"></span> ALL SYSTEMS READY</span>
+        <div class="language-control">
+          <button class="language-button" id="language-button" aria-expanded="false" aria-controls="language-panel">
+            <span aria-hidden="true">◎</span><span id="language-short">EN</span><span class="language-chevron">⌄</span>
+          </button>
+          <section class="language-panel" id="language-panel" aria-label="Language settings" hidden>
+            <div class="language-panel-heading">
+              <div class="eyebrow small-eyebrow" data-i18n="languageSettings">LANGUAGE SETTINGS</div>
+              <button class="panel-close" id="language-close" aria-label="Close language settings">×</button>
+            </div>
+            <label class="language-field"><span data-i18n="interfaceLanguage">Interface language</span>
+              <select id="interface-language">
+                <option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option>
+                <option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option>
+                <option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option>
+                <option value="ml">മലയാളം</option><option value="pa">ਪੰਜਾਬੀ</option><option value="ur">اردو</option>
+              </select>
+            </label>
+            <label class="language-field"><span data-i18n="voiceInputLanguage">Voice input language</span>
+              <select id="input-language">
+                <option value="auto" data-i18n="autoDetect">Auto Detect</option>
+                <option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option>
+                <option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option>
+                <option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option>
+                <option value="ml">മലയാളം</option><option value="pa">ਪੰਜਾਬੀ</option><option value="ur">اردو</option>
+              </select>
+            </label>
+            <label class="language-field"><span data-i18n="voiceOutputLanguage">Voice output language</span>
+              <select id="output-language">
+                <option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option>
+                <option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="bn">বাংলা</option>
+                <option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="kn">ಕನ್ನಡ</option>
+                <option value="ml">മലയാളം</option><option value="pa">ਪੰਜਾਬੀ</option><option value="ur">اردو</option>
+              </select>
+            </label>
+            <label class="language-option"><span><strong data-i18n="autoDetectLanguage">Auto Detect Language</strong><small data-i18n="detectHint">Detect English, Hindi, or Hinglish speech</small></span><input id="auto-detect-toggle" type="checkbox" checked></label>
+            <div class="language-option"><span><strong data-i18n="voiceAnswers">Voice answers</strong><small data-i18n="readResult">Read your result aloud</small></span><button id="speech-toggle" class="switch" role="switch" aria-checked="true" aria-label="Toggle voice answers"><span></span></button></div>
+          </section>
+        </div>
+        <button class="icon-button" id="theme-toggle" aria-label="Switch to light theme" title="Toggle theme"><span id="theme-icon">☼</span></button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span> THINK IT. SAY IT. SOLVE IT.</div>
+        <h1>Math, meet <span>your voice.</span></h1>
+        <p class="hero-copy">A little more natural. A lot more powerful.</p>
+      </div>
+      <button id="mode-toggle" class="mode-pill" aria-pressed="false"><span class="mode-spark">✳</span><span id="mode-label" data-i18n="scientific">Scientific</span><span class="mode-arrow">↗</span></button>
+    </section>
+
+    <div class="workspace">
+      <section class="calculator-card" aria-label="Calculator" data-core-aria="calculator">
+        <div class="display-panel">
+          <div class="display-topline">
+            <span class="display-label" data-core="yourExpression">YOUR EXPRESSION</span>
+            <div class="display-meta">
+              <span class="memory-indicator" id="memory-indicator" hidden>M</span>
+              <button class="angle-toggle" id="angle-toggle" aria-label="Switch angle unit">DEG</button>
+            </div>
+          </div>
+          <div id="expression-display" class="expression-display" aria-live="polite">Ready when you are</div>
+          <div id="result-display" class="result-display" aria-live="polite" data-core-aria="result">0</div>
+          <div class="display-footer">
+            <div class="display-note"><span class="note-spark">✦</span><span id="display-note">Your answer will appear here</span></div>
+            <button id="speak-result" class="speaker-button" aria-label="Speak current result" title="Speak result">◖))</button>
+          </div>
+        </div>
+
+        <div class="voice-panel">
+          <button class="mic-button" id="mic-button" aria-label="Start voice input"><span class="mic-icon">⌁</span></button>
+          <div class="voice-copy">
+            <div id="voice-title" class="voice-title">Try saying a calculation</div>
+            <div id="voice-status" class="voice-status">Tap the mic and speak naturally</div>
+          </div>
+          <button class="voice-retry" id="voice-retry" hidden><span data-i18n="tryAgain">Try again</span> <span>↻</span></button>
+        </div>
+        <div class="voice-transcript" id="voice-transcript" hidden>
+          <span class="transcript-label" data-i18n="languageLabel">LANGUAGE</span>
+          <span id="recognized-language"></span>
+          <span class="transcript-label">HEARD</span>
+          <span id="transcript-text"></span>
+        </div>
+
+        <div class="memory-row" aria-label="Memory controls">
+          <button class="memory-button" data-action="mc">MC</button>
+          <button class="memory-button" data-action="mr">MR</button>
+          <button class="memory-button" data-action="mplus">M+</button>
+          <button class="memory-button" data-action="mminus">M−</button>
+          <button class="memory-button" data-action="ms">MS</button>
+          <span class="memory-hint" data-core="memory">MEMORY</span>
+        </div>
+
+        <div class="keypad" id="keypad">
+          <button class="key scientific-key" data-insert="sin(">sin</button>
+          <button class="key scientific-key" data-insert="cos(">cos</button>
+          <button class="key scientific-key" data-insert="tan(">tan</button>
+          <button class="key scientific-key" data-insert="asin(">sin⁻¹</button>
+          <button class="key scientific-key" data-insert="acos(">cos⁻¹</button>
+          <button class="key scientific-key" data-insert="atan(">tan⁻¹</button>
+          <button class="key scientific-key" data-insert="cot(">cot</button>
+          <button class="key scientific-key" data-insert="sec(">sec</button>
+          <button class="key scientific-key" data-insert="csc(">csc</button>
+
+          <button class="key scientific-key" data-insert="log(">log</button>
+          <button class="key scientific-key" data-insert="ln(">ln</button>
+          <button class="key scientific-key" data-insert="sqrt(">√</button>
+          <button class="key scientific-key" data-insert="cbrt(">∛</button>
+          <button class="key scientific-key" data-insert="^2">x²</button>
+          <button class="key scientific-key" data-insert="^3">x³</button>
+
+          <button class="key scientific-key" data-insert="^">xʸ</button>
+          <button class="key scientific-key" data-insert="1÷(" data-wrap="reciprocal">1/x</button>
+          <button class="key scientific-key" data-insert="abs(">abs</button>
+          <button class="key scientific-key" data-insert="exp(">eˣ</button>
+          <button class="key scientific-key" data-insert="10^(">10ˣ</button>
+          <button class="key scientific-key" data-insert="!">n!</button>
+
+          <button class="key scientific-key" data-insert="π">π</button>
+          <button class="key scientific-key" data-insert="e">e</button>
+          <button class="key scientific-key" data-insert="(">(</button>
+          <button class="key scientific-key" data-insert=")">)</button>
+          <button class="key utility-key" data-action="clear">AC</button>
+          <button class="key utility-key" data-action="backspace" aria-label="Delete last character">⌫</button>
+
+          <button class="key" data-insert="7">7</button>
+          <button class="key" data-insert="8">8</button>
+          <button class="key" data-insert="9">9</button>
+          <button class="key operator-key" data-insert="÷">÷</button>
+          <button class="key operator-key" data-insert="%">%</button>
+          <button class="key operator-key" data-action="sign">±</button>
+
+          <button class="key" data-insert="4">4</button>
+          <button class="key" data-insert="5">5</button>
+          <button class="key" data-insert="6">6</button>
+          <button class="key operator-key" data-insert="×">×</button>
+          <button class="key operator-key" data-insert="−">−</button>
+          <button class="key operator-key" data-insert="+">+</button>
+
+          <button class="key" data-insert="1">1</button>
+          <button class="key" data-insert="2">2</button>
+          <button class="key" data-insert="3">3</button>
+          <button class="key" data-insert="0">0</button>
+          <button class="key" data-insert=".">.</button>
+          <button class="key equals-key" data-action="equals" aria-label="Calculate">=</button>
+        </div>
+        <footer class="calc-footer"><span>Built for curious minds</span><span>⌘ <kbd>ENTER</kbd> to calculate</span></footer>
+      </section>
+
+      <aside class="side-column">
+        <section class="history-card">
+          <div class="section-heading">
+            <div><div class="eyebrow small-eyebrow">YOUR RECENT MATH</div><h2><span data-core="history">History</span> <span id="history-count">0</span></h2></div>
+            <button id="clear-history" class="text-button" data-core="clear">Clear all</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <div class="empty-history"><span class="history-symbol">↗</span><p>Your calculations will<br>show up here.</p></div>
+          </div>
+          <div class="history-foot"><span class="history-foot-dot"></span> Saved on this device</div>
+        </section>
+
+        <section class="tips-card">
+          <div class="tips-top"><span class="tips-icon">✦</span><span class="eyebrow small-eyebrow">A QUICK TIP</span></div>
+          <p>Just say it like you mean it.</p>
+          <div class="example-quote">“What is 25 plus 35?”</div>
+          <div class="tip-bottom"><span class="tip-line"></span> NATURAL LANGUAGE, NO MATH DEGREE</div>
+        </section>
+
+      </aside>
+    </div>
+    <div class="bottom-note"><span>PRECISION, WITH A PERSONALITY.</span><span>Made for the way you think <span class="heart">✳</span></span></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
